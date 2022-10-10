@@ -16,16 +16,10 @@ const InputForm = () => {
       
     const handleChange =  (prop) => (event) => {
         event.preventDefault();
-        setIncome({ [prop]: event.target.value });
+        setIncome({ ...income, [prop]: parseInt(event.target.value) });
        
 
      };
-
-    const calculateTax = () => {
-        console.log({...results})
-        setResults({ totalIncome: income.employmentIncome*0.8 })
-        console.log({...results})
-    }
     
     return(
         <Box sx={{ p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>

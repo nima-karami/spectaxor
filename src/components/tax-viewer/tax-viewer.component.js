@@ -10,9 +10,20 @@ const TaxViewer = () => {
     const textBoxSx = { width: '25ch', marginY: 1, display: 'flex', justifyContent: 'space-between' }
     
     const calculateTax = () => {
-        console.log({...results})
-        setResults({ totalIncome: income.employmentIncome*0.8 })
-        console.log({...results})
+        console.log(income);
+        const incomeArr = Object.values(income);
+        incomeArr.shift();
+        const totalIncome = incomeArr.reduce((total, num) => total+num);
+    
+        console.log(incomeArr);
+        
+        for (let tax_bracket of federal_tax_brackets_2022) {
+            
+
+        }
+        
+        setResults({ totalIncome: totalIncome })
+ 
     }
 
     useEffect(()=> {
