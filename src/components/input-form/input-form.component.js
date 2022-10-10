@@ -1,7 +1,8 @@
 import { useState } from "react";
 
-import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Typography, FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import ProvinceDropDown from "../province-dropdown/province-dropdown.component";
 
 
 
@@ -19,8 +20,11 @@ const InputForm = () => {
       };
 
     return(
-        <Box>
-            <FormControl>
+        <Box sx={{ p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>
+            <Typography variant='h6' align='center'>Your Information</Typography>
+            <Box sx={{p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <ProvinceDropDown />
+                
                 <TextField
                     label="Employment Income"
                     id="employment-income"
@@ -76,7 +80,7 @@ const InputForm = () => {
                 }}/>
 
 
-            </FormControl>
+            </Box>
         </Box>
     )
 }
