@@ -1,8 +1,24 @@
 import { Typography, Box } from "@mui/material";
+import { useContext, useEffect } from "react";
+import { MyContext } from "../../context/context-provider";
+
+import { federal_tax_brackets_2022 } from "../../utils/tax-data";
 
 const TaxViewer = () => {
+    const { income, results, setResults } = useContext(MyContext);
+
     const textBoxSx = { width: '25ch', marginY: 1, display: 'flex', justifyContent: 'space-between' }
     
+    const calculateTax = () => {
+        console.log({...results})
+        setResults({ totalIncome: income.employmentIncome*0.8 })
+        console.log({...results})
+    }
+
+    useEffect(()=> {
+        calculateTax()
+    }, [income])
+
     return(
         <Box sx={{ p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>
             <Typography variant='h6' align='center'>Your Results</Typography>
@@ -11,7 +27,7 @@ const TaxViewer = () => {
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Total Income:</Typography>
-                    <Typography variant='body' align='center' >$100,000</Typography>
+                    <Typography variant='body' align='center' >${results.totalIncome}</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>

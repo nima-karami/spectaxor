@@ -1,3 +1,6 @@
+
+import ContextProvider from "./context/context-provider";
+
 import Graph from "./components/graph/graph.component";
 import Header from "./components/header/header.component";
 import InputForm from "./components/input-form/input-form.component";
@@ -7,17 +10,22 @@ import { Box } from "@mui/material";
 
 const App = () => {
     
+
+    // 
+
     
     return (
-        <Box>
-            <Header />  
-            <Box sx={{ m:4, display: 'flex', justifyContent: 'center'}}>
+        <ContextProvider>
+            <Box>
+                <Header />  
+                <Box sx={{ m:4, display: 'flex', justifyContent: 'center'}}>
 
-                <InputForm />
-                <TaxViewer />
-                <Graph />
+                    <InputForm />
+                    <TaxViewer />
+                    <Graph />
+                </Box>
             </Box>
-        </Box>
+        </ContextProvider>
         
     )
 }

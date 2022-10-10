@@ -1,24 +1,32 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+
+import { MyContext } from "../../context/context-provider";
+import { federal_tax_brackets_2022 } from "../../utils/tax-data";
+
+import ProvinceDropDown from "../province-dropdown/province-dropdown.component";
 
 import { Typography, FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import ProvinceDropDown from "../province-dropdown/province-dropdown.component";
 
 
 
 const InputForm = () => {
-    const [values, setValues] = useState({
-        employmentIncome: '',
-        selfEmploymentIncome: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-      });
-    
-      const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-      };
+    const { income, setIncome, results, setResults } = useContext(MyContext);
 
+      
+    const handleChange =  (prop) => (event) => {
+        event.preventDefault();
+        setIncome({ [prop]: event.target.value });
+       
+
+     };
+
+    const calculateTax = () => {
+        console.log({...results})
+        setResults({ totalIncome: income.employmentIncome*0.8 })
+        console.log({...results})
+    }
+    
     return(
         <Box sx={{ p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>
             <Typography variant='h6' align='center'>Your Information</Typography>
@@ -37,7 +45,7 @@ const InputForm = () => {
                 <TextField
                     label="Self-employment Income"
                     id="self-employment-income"
-                    onChange={handleChange('employmentIncome')}
+                    onChange={handleChange('selfEmploymentIncome')}
                     sx={{ m: 1, width: '25ch' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -46,7 +54,7 @@ const InputForm = () => {
                 <TextField
                     label="Other Income"
                     id="other-income"
-                    onChange={handleChange('employmentIncome')}
+                    onChange={handleChange('otherIncome')}
                     sx={{ m: 1, width: '25ch' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -55,7 +63,7 @@ const InputForm = () => {
                 <TextField
                     label="RRSP Contribution"
                     id="rrsp-contribution"
-                    onChange={handleChange('employmentIncome')}
+                    onChange={handleChange('RRSPcontribution')}
                     sx={{ m: 1, width: '25ch' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -64,7 +72,7 @@ const InputForm = () => {
                 <TextField
                     label="Capital Gains/Losses"
                     id="capital-gains-losses"
-                    onChange={handleChange('employmentIncome')}
+                    onChange={handleChange('capitalGainsLosses')}
                     sx={{ m: 1, width: '25ch' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -73,7 +81,7 @@ const InputForm = () => {
                 <TextField
                     label="Eligible Dividends"
                     id="eligible-dividends"
-                    onChange={handleChange('employmentIncome')}
+                    onChange={handleChange('eligibleDividends')}
                     sx={{ m: 1, width: '25ch' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
