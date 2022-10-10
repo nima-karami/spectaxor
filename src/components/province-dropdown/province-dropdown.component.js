@@ -13,11 +13,11 @@ const ProvinceDropDown = () => {
 
   return (
     <div>
-      <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-standard-label">Province</InputLabel>
+      <FormControl variant="outlined" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="select-province-dropdown-label">Province</InputLabel>
         <Select
-          labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
+          labelId="select-province-dropdown-label"
+          id="select-province-dropdown"
           value={province}
           onChange={handleChange}
           label="Province"
