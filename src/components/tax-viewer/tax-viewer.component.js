@@ -8,7 +8,7 @@ const TaxViewer = () => {
     const { income, results, setResults, numberWithCommas } = useContext(MyContext);
     const { totalIncome, federalTax, provincialTax, cppEiPremiums, totalTax, averageTaxRate, marginalTaxRate, afterTaxIncome } = results;
 
-    const textBoxSx = { width: '25ch', marginY: 1, display: 'flex', justifyContent: 'space-between' }
+    const textBoxSx = { width: '30ch', marginY: 1, display: 'flex', justifyContent: 'space-between' }
 
 
 
@@ -55,24 +55,24 @@ const TaxViewer = () => {
                 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Average Tax Rate:</Typography>
-                    <Typography variant='body' align='center' >{numberWithCommas(averageTaxRate)}%</Typography>
+                    <Typography variant='body' align='center' >{averageTaxRate}%</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Marginal Tax Rate:</Typography>
-                    <Typography variant='body' align='center' >{numberWithCommas(marginalTaxRate)}%</Typography>
+                    <Typography variant='body' align='center' >{marginalTaxRate}%</Typography>
                 </Box>
 
                 <hr width="100%" />
                 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >After-tax Income:</Typography>
-                    <Typography variant='body' align='center' >${results.afterTaxIncome}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(afterTaxIncome)}</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Net Monthly Income:</Typography>
-                    <Typography variant='body' align='center' >${Math.round(results.afterTaxIncome/12)}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(Math.round(afterTaxIncome/12))}</Typography>
                 </Box>
                 
             </Box>

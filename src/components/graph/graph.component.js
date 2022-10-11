@@ -2,65 +2,54 @@ import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const data = [
-    {
-      name: 'Page A',
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: 'Page B',
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: 'Page C',
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: 'Page D',
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: 'Page E',
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: 'Page F',
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: 'Page G',
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+
+
+import { calculateResults } from "../../utils/calculate-results";
+import { useContext } from "react";
+import { MyContext } from "../../context/context-provider";
 
 
 const Graph = () => {
+  
+  const { income } = useContext(MyContext);
+
+  const salariesArr = [0, 30000, 60000, 90000, 120000, 150000, 180000, 210000, 240000, 270000, 300000];
+  const resultsArr = [];
+
+  for (let salary of salariesArr) {
     
+    const tempIncome = {
+      province: income.province,
+      employmentIncome: salary,
+      selfEmploymentIncome: 0,
+      otherIncome: 0,
+      rrspContribution: 0,
+      capitalGainsLosses: 0,
+      eligibleDividends: 0
+    }
+    
+    let { federalTax, provincialTax, cppEiPremiums } = calculateResults(tempIncome);
+
+    resultsArr.push({
+      'Salary': `${salary/1000}k`,
+      'Federal Tax': federalTax,
+      'Provincial Tax': provincialTax,
+      'CPP/EI Premiums': cppEiPremiums
+    })
+  }
+
+
     return(
         <Box sx={{ p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>
             <Typography variant='h6' align='center'>Graph</Typography>
             
             <Box sx={{ width: '700px', height: '90%', marginY: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <Typography variant='body' align='center' m={3}>Ontario Marginal Tax Rates</Typography>
+                <Typography variant='body' align='center' m={3}>{income.province} Marginal Tax Rates</Typography>
                 <ResponsiveContainer width="95%" height="80%">
                     <AreaChart
                         width={800}
                         height={400}
-                        data={data}
+                        data={resultsArr}
                         margin={{
                             top: 10,
                             right: 30,
@@ -69,12 +58,13 @@ const Graph = () => {
                         }}
                         >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
+                        <XAxis dataKey="Salary" />
                         <YAxis />
                         <Tooltip />
-                        <Area type="monotone" dataKey="uv" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                        <Area type="monotone" dataKey="pv" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                        <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                        <Area type="monotone" dataKey="Federal Tax" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                        <Area type="monotone" dataKey="Provincial Tax" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                        <Area type="monotone" dataKey="CPP/EI Premiums" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                        <Legend/>
                     </AreaChart>
                 </ResponsiveContainer>
             </Box>
