@@ -7,10 +7,17 @@ export const federal_tax_brackets_2022 = [
     [+Infinity, 33]
 ]
 
-export const ontario_tax_brackets_2022 = [
+export const provincial_tax_brackets_2022 = {
+    Ontario: [
     [46226, 5.05],
     [92454, 9.15],
     [150000, 11.16],
     [220000, 12.16],
     [+Infinity, 13.16]
 ]
+}
+
+export const federal_basic_personal_amount_2022 = 14398;
+export const provincial_basic_personal_amount_2022 = {
+    Ontario: 11141,
+}
