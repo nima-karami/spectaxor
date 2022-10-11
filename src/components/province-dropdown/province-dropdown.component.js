@@ -9,7 +9,9 @@ const ProvinceDropDown = () => {
   const { income, setIncome } = useContext(MyContext);
 
   const handleChange = (event) => {
+    event.preventDefault();
     setIncome({...income, province: event.target.value});
+    console.log(income.province)
   };
 
   return (
@@ -23,12 +25,20 @@ const ProvinceDropDown = () => {
           onChange={handleChange}
           label="Province"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
+          
           <MenuItem value={'Ontario'}>Ontario</MenuItem>
-          <MenuItem value={'British Columbia'}>British Columbia</MenuItem>
-          <MenuItem value={'Winnipeg'}>Winnipeg</MenuItem>
+          <MenuItem value={'BritishColumbia'}>British Columbia</MenuItem>
+          <MenuItem value={'Quebec'}>Quebec</MenuItem>
+          <MenuItem value={'NewFoundlandAndLabrador'}>Newfoundland an Labrador</MenuItem>
+          <MenuItem value={'PrinceEdwardIsland'}>Prince Edward Island</MenuItem>
+          <MenuItem value={'NovaScotia'}>Nova Scotia</MenuItem>
+          <MenuItem value={'NewBrunswick'}>New Brunswick</MenuItem>
+          <MenuItem value={'Saskatchewan'}>Saskatchewan</MenuItem>
+          <MenuItem value={'Manitoba'}>Manitoba</MenuItem>
+          <MenuItem value={'Alberta'}>Alberta</MenuItem>
+          <MenuItem value={'Yukon'}>Yukon</MenuItem>
+          <MenuItem value={'NorthwestTerritories'}>Northwest Territories</MenuItem>
+          <MenuItem value={'Nunavut'}>Nunavut</MenuItem>
         </Select>
       </FormControl>
     </div>
