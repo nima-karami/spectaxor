@@ -11,18 +11,38 @@ const TaxViewer = () => {
     
     const calculateTax = () => {
         console.log(income);
-        const incomeArr = Object.values(income);
-        incomeArr.shift();
-        const totalIncome = incomeArr.reduce((total, num) => total+num);
-    
-        console.log(incomeArr);
+        const { employmentIncome, selfEmploymentIncome, otherIncome, capitalGainsLosses, eligibleDividends } = income;
+        let federalTax = 0;
+        let provincialTax = 0;
+        let cppEiPremiums = 0;
+        let totalTax = 0;
+        let averageTaxRate = 0;
+        let marginalTaxRate = 0;
+        let afterTaxIncome = 0;
+        // const incomeArr = Object.values(income);
+        // incomeArr.shift();
+        const totalIncome = employmentIncome + selfEmploymentIncome + otherIncome + capitalGainsLosses + eligibleDividends;
+        // console.log(incomeArr);
         
-        for (let tax_bracket of federal_tax_brackets_2022) {
-            
 
+        let taxableIncome = employmentIncome + selfEmploymentIncome;
+        let taxBracketLow = 0;
+        let taxBracketHigh = 0;
+        let taxRate = 0;
+
+        for (let taxBracket of federal_tax_brackets_2022) {
+            [taxBracketHigh, taxRate] = taxBracket;
+           
+            if (taxBracketLow < employmentIncome) {
+                let taxedAmount = Math.min(taxableIncome, taxBracketHigh-taxBracketLow);
+                federalTax +=  Math.floor(taxedAmount * taxRate/100);
+                taxableIncome -= taxedAmount;
+            }
+
+            taxBracketLow = taxBracketHigh;
         }
         
-        setResults({ totalIncome: totalIncome })
+        setResults({ totalIncome: totalIncome, federalTax: federalTax })
  
     }
 
@@ -43,7 +63,7 @@ const TaxViewer = () => {
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Federal Tax:</Typography>
-                    <Typography variant='body' align='center' >$100,000</Typography>
+                    <Typography variant='body' align='center' >${results.federalTax}</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
