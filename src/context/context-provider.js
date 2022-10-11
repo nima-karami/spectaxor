@@ -28,7 +28,11 @@ const ContextProvider = ({ children }) => {
     const [income, setIncome] = useState(INITIAL_INCOME_STATE);
     const [results, setResults] = useState(INITIAL_RESULTS_STATE);
     
-    const value = { income, setIncome, results, setResults };
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    const value = { income, setIncome, results, setResults, numberWithCommas };
     return (
         <MyContext.Provider value={ value }>
             {children}

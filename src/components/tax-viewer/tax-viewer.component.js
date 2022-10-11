@@ -2,21 +2,15 @@ import { Typography, Box } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { MyContext } from "../../context/context-provider";
 
-import { federal_tax_brackets_2022,
-        provincial_tax_brackets_2022,
-        federal_basic_personal_amount_2022,
-        provincial_basic_personal_amount_2022,
-        cpp_2022,
-        ei_2022
-
-      } from "../../utils/tax-data";
-
 import { calculateResults } from "../../utils/calculate-results";
 
 const TaxViewer = () => {
-    const { income, results, setResults } = useContext(MyContext);
+    const { income, results, setResults, numberWithCommas } = useContext(MyContext);
+    const { totalIncome, federalTax, provincialTax, cppEiPremiums, totalTax, averageTaxRate, marginalTaxRate, afterTaxIncome } = results;
 
     const textBoxSx = { width: '25ch', marginY: 1, display: 'flex', justifyContent: 'space-between' }
+
+
 
     useEffect(()=> {
         let results = calculateResults(income);
@@ -31,29 +25,29 @@ const TaxViewer = () => {
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Total Income:</Typography>
-                    <Typography variant='body' align='center' >${results.totalIncome}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(totalIncome)}</Typography>
                 </Box>
 
                 <hr width="100%" />
                 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Federal Tax:</Typography>
-                    <Typography variant='body' align='center' >${results.federalTax}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(federalTax)}</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Provincial Tax:</Typography>
-                    <Typography variant='body' align='center' >${results.provincialTax}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(provincialTax)}</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >CPP/EI Premiums:</Typography>
-                    <Typography variant='body' align='center' >${results.cppEiPremiums}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(cppEiPremiums)}</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Total Tax:</Typography>
-                    <Typography variant='body' align='center' >${results.totalTax}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(totalTax)}</Typography>
                 </Box>
                 
                 <hr width="100%" />
@@ -61,12 +55,12 @@ const TaxViewer = () => {
                 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Average Tax Rate:</Typography>
-                    <Typography variant='body' align='center' >{results.averageTaxRate}%</Typography>
+                    <Typography variant='body' align='center' >{numberWithCommas(averageTaxRate)}%</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Marginal Tax Rate:</Typography>
-                    <Typography variant='body' align='center' >{results.marginalTaxRate}%</Typography>
+                    <Typography variant='body' align='center' >{numberWithCommas(marginalTaxRate)}%</Typography>
                 </Box>
 
                 <hr width="100%" />

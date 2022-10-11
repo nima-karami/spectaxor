@@ -11,7 +11,7 @@ import { Box } from "@mui/system";
 
 
 const InputForm = () => {
-    const { income, setIncome, results, setResults } = useContext(MyContext);
+    const { income, setIncome, results, setResults, numbersWithCommas } = useContext(MyContext);
 
       
     const handleChange =  (prop) => (event) => {
@@ -25,6 +25,7 @@ const InputForm = () => {
         <Box sx={{ p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>
             <Typography variant='h6' align='center'>Your Information</Typography>
             <Box sx={{p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                
                 <ProvinceDropDown />
                 
                 <TextField

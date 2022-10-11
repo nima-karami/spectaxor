@@ -9,7 +9,7 @@ import { federal_tax_brackets_2022,
 
 export const calculateResults = (incomeData) => {
     const income = incomeData;
-    const { employmentIncome, selfEmploymentIncome, otherIncome, rrspContribution, capitalGainsLosses, eligibleDividends } = income;
+    const { province, employmentIncome, selfEmploymentIncome, otherIncome, rrspContribution, capitalGainsLosses, eligibleDividends } = income;
 
     let federalTax = 0;
     let provincialTax = 0;
@@ -52,11 +52,11 @@ export const calculateResults = (incomeData) => {
     }
 
     // Calculate provincial tax
-    let provincialTaxCredit = provincial_basic_personal_amount_2022[income.province]*provincial_tax_brackets_2022[income.province][0][1]/100;
-    console.log('provincial tax credit', provincialTaxCredit);
+    let provincialTaxCredit = provincial_basic_personal_amount_2022[province]*provincial_tax_brackets_2022[province][0][1]/100;
+    
     unTaxedIncome = taxableIncome;
     // Check if income is lower than the basic personal amount
-    if (unTaxedIncome < provincial_basic_personal_amount_2022[income.province]) {
+    if (unTaxedIncome < provincial_basic_personal_amount_2022[province]) {
         unTaxedIncome = 0;
     } else {
         unTaxedIncome -= provincialTaxCredit;
@@ -66,7 +66,7 @@ export const calculateResults = (incomeData) => {
     let provincialTaxBracketHigh = 0;
     let provincialTaxRate = 0;
 
-    for (let taxBracket of provincial_tax_brackets_2022[income.province]) {
+    for (let taxBracket of provincial_tax_brackets_2022[province]) {
      
         if (provincialTaxBracketLow < taxableIncome) {
             [provincialTaxBracketHigh, provincialTaxRate] = taxBracket;
