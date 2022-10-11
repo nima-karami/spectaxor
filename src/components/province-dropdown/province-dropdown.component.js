@@ -25,19 +25,18 @@ const ProvinceDropDown = () => {
           onChange={handleChange}
           label="Province"
         >
-          
           <MenuItem value={'Ontario'}>Ontario</MenuItem>
-          <MenuItem value={'BritishColumbia'}>British Columbia</MenuItem>
+          <MenuItem value={'British Columbia'}>British Columbia</MenuItem>
           <MenuItem value={'Quebec'}>Quebec</MenuItem>
-          <MenuItem value={'NewFoundlandAndLabrador'}>Newfoundland an Labrador</MenuItem>
-          <MenuItem value={'PrinceEdwardIsland'}>Prince Edward Island</MenuItem>
-          <MenuItem value={'NovaScotia'}>Nova Scotia</MenuItem>
-          <MenuItem value={'NewBrunswick'}>New Brunswick</MenuItem>
+          <MenuItem value={'NewFoundland and Labrador'}>Newfoundland and Labrador</MenuItem>
+          <MenuItem value={'Prince Edward Island'}>Prince Edward Island</MenuItem>
+          <MenuItem value={'Nova Scotia'}>Nova Scotia</MenuItem>
+          <MenuItem value={'New Brunswick'}>New Brunswick</MenuItem>
           <MenuItem value={'Saskatchewan'}>Saskatchewan</MenuItem>
           <MenuItem value={'Manitoba'}>Manitoba</MenuItem>
           <MenuItem value={'Alberta'}>Alberta</MenuItem>
           <MenuItem value={'Yukon'}>Yukon</MenuItem>
-          <MenuItem value={'NorthwestTerritories'}>Northwest Territories</MenuItem>
+          <MenuItem value={'Northwest Territories'}>Northwest Territories</MenuItem>
           <MenuItem value={'Nunavut'}>Nunavut</MenuItem>
         </Select>
       </FormControl>

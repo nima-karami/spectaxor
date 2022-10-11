@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 
 
@@ -44,7 +44,7 @@ const Graph = () => {
             <Typography variant='h6' align='center'>Graph</Typography>
             
             <Box sx={{ width: '700px', height: '90%', marginY: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <Typography variant='body' align='center' m={3}>{income.province} Marginal Tax Rates</Typography>
+                <Typography variant='body' align='center' m={3}>{income.province} Employment Tax</Typography>
                 <ResponsiveContainer width="95%" height="80%">
                     <AreaChart
                         width={800}
@@ -61,6 +61,7 @@ const Graph = () => {
                         <XAxis dataKey="Salary" />
                         <YAxis />
                         <Tooltip />
+                        
                         <Area type="monotone" dataKey="Federal Tax" stackId="1" stroke="#8884d8" fill="#8884d8" />
                         <Area type="monotone" dataKey="Provincial Tax" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
                         <Area type="monotone" dataKey="CPP/EI Premiums" stackId="1" stroke="#ffc658" fill="#ffc658" />
