@@ -6,6 +6,9 @@ import { federal_tax_brackets_2022,
         provincial_tax_brackets_2022,
         federal_basic_personal_amount_2022,
         provincial_basic_personal_amount_2022,
+        cpp_2022,
+        ei_2022
+
       } from "../../utils/tax-data";
 
 const TaxViewer = () => {
@@ -15,29 +18,30 @@ const TaxViewer = () => {
     
     const calculateAll = () => {
         console.log(income);
-        const { employmentIncome, selfEmploymentIncome, otherIncome, capitalGainsLosses, eligibleDividends } = income;
+        const { employmentIncome, selfEmploymentIncome, otherIncome, rrspContribution, capitalGainsLosses, eligibleDividends } = income;
         let federalTax = 0;
         let provincialTax = 0;
         let cppEiPremiums = 0;
         let totalTax = 0;
-        let averagefederalTaxRate = 0;
-        let marginalfederalTaxRate = 0;
+        let averageTaxRate = 0;
+        let marginalTaxRate = 0;
         let afterTaxIncome = 0;
         // const incomeArr = Object.values(income);
         // incomeArr.shift();
         const totalIncome = employmentIncome + selfEmploymentIncome + otherIncome + capitalGainsLosses + eligibleDividends;
+        const taxableIncome = employmentIncome + selfEmploymentIncome + otherIncome + capitalGainsLosses*0.5 + eligibleDividends*0.38 - rrspContribution;
         // console.log(incomeArr);
             
         
         // Calculate federal tax
         let federalTaxCredit = federal_basic_personal_amount_2022*federal_tax_brackets_2022[0][1]/100
-        let taxableIncome = employmentIncome + selfEmploymentIncome;
+        let unTaxedIncome = taxableIncome;
         
         // Check if income is lower than the basic personal amount
-        if (taxableIncome < federal_basic_personal_amount_2022) {
-            taxableIncome = 0;
+        if (unTaxedIncome < federal_basic_personal_amount_2022) {
+            unTaxedIncome = 0;
         } else {
-            taxableIncome -= federalTaxCredit;
+            unTaxedIncome -= federalTaxCredit;
         }
 
         let federalTaxBracketLow = 0;
@@ -45,12 +49,12 @@ const TaxViewer = () => {
         let federalTaxRate = 0;
 
         for (let taxBracket of federal_tax_brackets_2022) {
-            [federalTaxBracketHigh, federalTaxRate] = taxBracket;
-           
-            if (federalTaxBracketLow < employmentIncome) {
-                let taxedAmount = Math.min(taxableIncome, federalTaxBracketHigh-federalTaxBracketLow);
+            
+            if (federalTaxBracketLow < taxableIncome) {
+                [federalTaxBracketHigh, federalTaxRate] = taxBracket;
+                let taxedAmount = Math.min(unTaxedIncome, federalTaxBracketHigh-federalTaxBracketLow);
                 federalTax +=  Math.floor(taxedAmount * federalTaxRate/100);
-                taxableIncome -= taxedAmount;
+                unTaxedIncome -= taxedAmount;
                 federalTaxBracketLow = federalTaxBracketHigh;
             }
             
@@ -59,12 +63,12 @@ const TaxViewer = () => {
         // Calculate provincial tax
         let provincialTaxCredit = provincial_basic_personal_amount_2022[income.province]*provincial_tax_brackets_2022[income.province][0][1]/100;
         console.log('provincial tax credit', provincialTaxCredit);
-        taxableIncome = employmentIncome + selfEmploymentIncome;
+        unTaxedIncome = taxableIncome;
         // Check if income is lower than the basic personal amount
-        if (taxableIncome < provincial_basic_personal_amount_2022[income.province]) {
-            taxableIncome = 0;
+        if (unTaxedIncome < provincial_basic_personal_amount_2022[income.province]) {
+            unTaxedIncome = 0;
         } else {
-            taxableIncome -= provincialTaxCredit;
+            unTaxedIncome -= provincialTaxCredit;
         }
 
         let provincialTaxBracketLow = 0;
@@ -72,23 +76,53 @@ const TaxViewer = () => {
         let provincialTaxRate = 0;
 
         for (let taxBracket of provincial_tax_brackets_2022[income.province]) {
-            
-            [provincialTaxBracketHigh, provincialTaxRate] = taxBracket;
-
-            if (provincialTaxBracketLow < employmentIncome) {
-                let taxedAmount = Math.min(taxableIncome, provincialTaxBracketHigh-provincialTaxBracketLow);
+         
+            if (provincialTaxBracketLow < taxableIncome) {
+                [provincialTaxBracketHigh, provincialTaxRate] = taxBracket;
+                let taxedAmount = Math.min(unTaxedIncome, provincialTaxBracketHigh-provincialTaxBracketLow);
                 provincialTax +=  Math.floor(taxedAmount * provincialTaxRate/100);
-                taxableIncome -= taxedAmount;
+                unTaxedIncome -= taxedAmount;
                 provincialTaxBracketLow = provincialTaxBracketHigh;
             }
         }
 
         
-        // calculate provincial tax
+        // Calculate CPP/EI
 
+        let cppPremium = 0;
 
+        let TotalEmploymentIncome = employmentIncome + selfEmploymentIncome;
+        
+        if (cpp_2022.basicExemptionAmount > TotalEmploymentIncome) {
+            cppPremium = 0;
+        } else {
+            let cppCredit = cpp_2022.basicExemptionAmount * cpp_2022.rate /100;
+            let cppEmployed = Math.min(employmentIncome * cpp_2022.rate /100, cpp_2022.maxContribution);
+            let cppSelfEmployed = Math.min(selfEmploymentIncome * cpp_2022.rate * 2 /100, cpp_2022.maxContribution * 2);
+            cppPremium = cppEmployed + cppSelfEmployed - cppCredit;
+        }
+        
+        let eiPremiums = Math.min(employmentIncome * ei_2022.rate/100, ei_2022.maxContribution);
 
-        setResults({ totalIncome: totalIncome, federalTax: federalTax, provincialTax: provincialTax })
+        cppEiPremiums = Math.ceil(cppPremium + eiPremiums);
+
+        // Calculate total tax
+        totalTax = federalTax + provincialTax + cppEiPremiums;
+        afterTaxIncome = totalIncome - totalTax;
+        averageTaxRate = totalIncome ? (totalTax/totalIncome*100).toFixed(2): 0;
+        marginalTaxRate = federalTaxRate + provincialTaxRate;
+        
+        console.log(provincialTaxRate, federalTaxRate);
+
+        setResults({ ...results,
+            totalIncome: totalIncome,
+            federalTax: federalTax,
+            provincialTax: provincialTax,
+            cppEiPremiums: cppEiPremiums,
+            totalTax: totalTax,
+            afterTaxIncome: afterTaxIncome,
+            averageTaxRate: averageTaxRate,
+            marginalTaxRate: marginalTaxRate })
 
 
  
@@ -109,6 +143,8 @@ const TaxViewer = () => {
                     <Typography variant='body' align='center' >${results.totalIncome}</Typography>
                 </Box>
 
+                <hr width="100%" />
+                
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Federal Tax:</Typography>
                     <Typography variant='body' align='center' >${results.federalTax}</Typography>
@@ -121,28 +157,39 @@ const TaxViewer = () => {
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >CPP/EI Premiums:</Typography>
-                    <Typography variant='body' align='center' >$100,000</Typography>
+                    <Typography variant='body' align='center' >${results.cppEiPremiums}</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Total Tax:</Typography>
-                    <Typography variant='body' align='center' >$100,000</Typography>
+                    <Typography variant='body' align='center' >${results.totalTax}</Typography>
                 </Box>
-
+                
+                <hr width="100%" />
+                
+                
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Average Tax Rate:</Typography>
-                    <Typography variant='body' align='center' >20%</Typography>
+                    <Typography variant='body' align='center' >{results.averageTaxRate}%</Typography>
                 </Box>
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Marginal Tax Rate:</Typography>
-                    <Typography variant='body' align='center' >50%</Typography>
+                    <Typography variant='body' align='center' >{results.marginalTaxRate}%</Typography>
                 </Box>
+
+                <hr width="100%" />
                 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >After-tax Income:</Typography>
-                    <Typography variant='body' align='center' >$100,000</Typography>
+                    <Typography variant='body' align='center' >${results.afterTaxIncome}</Typography>
                 </Box>
+
+                <Box sx={textBoxSx}>
+                    <Typography variant='body' align='center' >Net Monthly Income:</Typography>
+                    <Typography variant='body' align='center' >${Math.round(results.afterTaxIncome/12)}</Typography>
+                </Box>
+                
             </Box>
         </Box>
         

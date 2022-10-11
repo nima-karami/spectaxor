@@ -16,7 +16,7 @@ const InputForm = () => {
       
     const handleChange =  (prop) => (event) => {
         event.preventDefault();
-        setIncome({ ...income, [prop]: parseInt(event.target.value) });
+        setIncome({ ...income, [prop]: event.target.value ? parseInt(event.target.value) : 0 });
        
 
      };
@@ -57,7 +57,7 @@ const InputForm = () => {
                 <TextField
                     label="RRSP Contribution"
                     id="rrsp-contribution"
-                    onChange={handleChange('RRSPcontribution')}
+                    onChange={handleChange('rrspContribution')}
                     sx={{ m: 1, width: '25ch' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,

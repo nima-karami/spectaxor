@@ -7,7 +7,7 @@ const INITIAL_INCOME_STATE = {
     employmentIncome: 0,
     selfEmploymentIncome: 0,
     otherIncome: 0,
-    RRSPContribution: 0,
+    rrspContribution: 0,
     capitalGainsLosses: 0,
     eligibleDividends: 0
 }

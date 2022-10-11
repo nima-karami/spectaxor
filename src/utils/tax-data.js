@@ -18,6 +18,20 @@ export const provincial_tax_brackets_2022 = {
 }
 
 export const federal_basic_personal_amount_2022 = 14398;
+
 export const provincial_basic_personal_amount_2022 = {
     Ontario: 11141,
+}
+
+// https://capricmw.ca/blog/federal-government-announces-new-cpp-and-ei-maximums#:~:text=The%20employee%20and%20employer%20contribution,11.4%20per%20cent%20in%202022.
+// cpp basic exemption amount and rate
+export const cpp_2022 = {
+    rate: 5.7,
+    basicExemptionAmount: 3500,
+    maxContribution: 3499.80
+}
+
+export const ei_2022 = {
+    rate: 1.58,
+    maxContribution: 952.74
 }
