@@ -40,10 +40,10 @@ const Graph = () => {
 
 
     return(
-        <Box sx={{ p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>
+        <Box sx={{ width: { xs: '346px', md: '755px'}, p: 3, m: 3, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px', borderRadius: 4 }}>
             <Typography variant='h6' align='center'>Graph</Typography>
             
-            <Box sx={{ width: '700px', height: '90%', marginY: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <Box sx={{ width: '100%', height: '90%', marginY: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <Typography variant='body' align='center' m={3}>{income.province} Employment Tax</Typography>
                 <ResponsiveContainer width="95%" height="80%">
                     <AreaChart

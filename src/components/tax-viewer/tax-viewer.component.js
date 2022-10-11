@@ -8,7 +8,7 @@ const TaxViewer = () => {
     const { income, results, setResults, numberWithCommas } = useContext(MyContext);
     const { totalIncome, federalTax, provincialTax, cppEiPremiums, totalTax, averageTaxRate, marginalTaxRate, afterTaxIncome } = results;
 
-    const textBoxSx = { width: '30ch', marginY: 1, display: 'flex', justifyContent: 'space-between' }
+    const textBoxSx = { width: '250px', marginY: 1, display: 'flex', justifyContent: 'space-between' }
 
 
 

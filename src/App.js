@@ -6,25 +6,23 @@ import Header from "./components/header/header.component";
 import InputForm from "./components/input-form/input-form.component";
 import TaxViewer from "./components/tax-viewer/tax-viewer.component";
 
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 const App = () => {
-    
-
-    // 
-
-    
+       
     return (
         <ContextProvider>
-            <Box>
+            <Container  maxWidth='false' sx={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Header />  
-                <Box sx={{ m:4, display: 'flex', justifyContent: 'center'}}>
-
+                <Container maxWidth='false' sx={{ m:4, display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+                
                     <InputForm />
                     <TaxViewer />
                     <Graph />
-                </Box>
-            </Box>
+
+                
+                </Container>
+            </Container>
         </ContextProvider>
         
     )

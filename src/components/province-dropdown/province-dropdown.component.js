@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -11,12 +11,11 @@ const ProvinceDropDown = () => {
   const handleChange = (event) => {
     event.preventDefault();
     setIncome({...income, province: event.target.value});
-    console.log(income.province)
   };
 
   return (
     <div>
-      <FormControl variant="outlined" sx={{ m: 1, width: '30ch' }}>
+      <FormControl variant="outlined" sx={{ m: 1, width: '250px' }}>
         <InputLabel id="select-province-dropdown-label">Province</InputLabel>
         <Select
           labelId="select-province-dropdown-label"

@@ -32,7 +32,7 @@ const InputForm = () => {
                     label="Employment Income"
                     id="employment-income"
                     onChange={handleChange('employmentIncome')}
-                    sx={{ m: 1, width: '30ch' }}
+                    sx={{ m: 1, width: '250px' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}/>
@@ -41,7 +41,7 @@ const InputForm = () => {
                     label="Self-employment Income"
                     id="self-employment-income"
                     onChange={handleChange('selfEmploymentIncome')}
-                    sx={{ m: 1, width: '30ch' }}
+                    sx={{ m: 1, width: '250px' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}/>
@@ -50,7 +50,7 @@ const InputForm = () => {
                     label="Other Income"
                     id="other-income"
                     onChange={handleChange('otherIncome')}
-                    sx={{ m: 1, width: '30ch' }}
+                    sx={{ m: 1, width: '250px' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}/>
@@ -59,7 +59,7 @@ const InputForm = () => {
                     label="RRSP Contribution"
                     id="rrsp-contribution"
                     onChange={handleChange('rrspContribution')}
-                    sx={{ m: 1, width: '30ch' }}
+                    sx={{ m: 1, width: '250px' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}/>
@@ -68,7 +68,7 @@ const InputForm = () => {
                     label="Capital Gains/Losses"
                     id="capital-gains-losses"
                     onChange={handleChange('capitalGainsLosses')}
-                    sx={{ m: 1, width: '30ch' }}
+                    sx={{ m: 1, width: '250px' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}/>
@@ -77,7 +77,7 @@ const InputForm = () => {
                     label="Eligible Dividends"
                     id="eligible-dividends"
                     onChange={handleChange('eligibleDividends')}
-                    sx={{ m: 1, width: '30ch' }}
+                    sx={{ m: 1, width: '250px' }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}/>
