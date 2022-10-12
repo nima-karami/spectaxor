@@ -8,6 +8,7 @@ import InputForm from "./components/input-form/input-form.component";
 import TaxViewer from "./components/tax-viewer/tax-viewer.component";
 
 import { Container } from "@mui/material";
+import Footer from "./components/footer/footer.component";
 
 const theme = createTheme({
     palette: {
@@ -25,11 +26,13 @@ const App = () => {
             <ThemeProvider theme={theme}>
                 <Container  maxWidth='false' sx={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Header />  
-                    <Container maxWidth='false' sx={{ m:4, display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+                    <Container maxWidth='false' sx={{ m:2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
                         <InputForm />
                         <TaxViewer />
                         <Graph />
+                        
                     </Container>
+                    <Footer />
                 </Container>
             </ThemeProvider>
         </ContextProvider>
