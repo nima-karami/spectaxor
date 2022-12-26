@@ -6,7 +6,7 @@ import { calculateResults } from "../../utils/calculate-results";
 
 const TaxViewer = () => {
     const { income, results, setResults, numberWithCommas } = useContext(MyContext);
-    const { totalIncome, federalTax, provincialTax, cppEiPremiums, totalTax, averageTaxRate, marginalTaxRate, afterTaxIncome } = results;
+    const { totalIncome, federalTax, provincialTax, cppEiPremiums, totalTax, averageTaxRate, marginalTaxRate, afterTaxIncome, netMonthlyIncome, netWeeklyIncome, netHourlyIncome } = results;
 
     const textBoxSx = { width: '250px', marginY: 1, display: 'flex', justifyContent: 'space-between' }
 
@@ -72,7 +72,17 @@ const TaxViewer = () => {
 
                 <Box sx={textBoxSx}>
                     <Typography variant='body' align='center' >Net Monthly Income:</Typography>
-                    <Typography variant='body' align='center' >${numberWithCommas(Math.round(afterTaxIncome/12))}</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(netMonthlyIncome)}</Typography>
+                </Box>
+                
+                <Box sx={textBoxSx}>
+                    <Typography variant='body' align='center' >Net Weekly Income:</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(netWeeklyIncome)}</Typography>
+                </Box>
+                
+                <Box sx={textBoxSx}>
+                    <Typography variant='body' align='center' >Net Hourly Income:</Typography>
+                    <Typography variant='body' align='center' >${numberWithCommas(netHourlyIncome)}</Typography>
                 </Box>
                 
             </Box>

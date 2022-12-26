@@ -18,6 +18,9 @@ export const calculateResults = (incomeData) => {
     let averageTaxRate = 0;
     let marginalTaxRate = 0;
     let afterTaxIncome = 0;
+    let netMonthlyIncome = 0;
+    let netWeeklyIncome = 0;
+    let netHourlyIncome = 0;
     
     
     const totalIncome = employmentIncome + selfEmploymentIncome + otherIncome + capitalGainsLosses + eligibleDividends;
@@ -98,6 +101,9 @@ export const calculateResults = (incomeData) => {
     // Calculate total tax
     totalTax = federalTax + provincialTax + cppEiPremiums;
     afterTaxIncome = totalIncome - totalTax;
+    netMonthlyIncome = Math.round(afterTaxIncome / 12);
+    netHourlyIncome = (netMonthlyIncome / 172).toFixed(2);
+    netWeeklyIncome = Math.round(netHourlyIncome * 40);
     averageTaxRate = totalIncome ? (totalTax/totalIncome*100).toFixed(2): 0;
     marginalTaxRate = federalTaxRate + provincialTaxRate;
     
@@ -110,5 +116,9 @@ export const calculateResults = (incomeData) => {
         totalTax: totalTax,
         afterTaxIncome: afterTaxIncome,
         averageTaxRate: averageTaxRate,
-        marginalTaxRate: marginalTaxRate })
+        marginalTaxRate: marginalTaxRate,
+        netMonthlyIncome: netMonthlyIncome,
+        netWeeklyIncome: netWeeklyIncome,
+        netHourlyIncome: netHourlyIncome
+     })
 }

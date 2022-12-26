@@ -18,9 +18,12 @@ const INITIAL_RESULTS_STATE = {
     provincialTax: 0,
     cppEiPremiums: 0,
     totalTax: 0,
+    afterTaxIncome: 0,
     averageTaxRate: 0,
     marginalTaxRate: 0,
-    afterTaxIncome: 0,
+    netMonthlyIncome: 0,
+    netWeeklyIncome: 0,
+    netHourlyIncome: 0
 }
 
 const ContextProvider = ({ children }) => {
