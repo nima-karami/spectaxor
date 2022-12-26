@@ -1,17 +1,16 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import { MyContext } from "../../context/context-provider";
-import { federal_tax_brackets_2022 } from "../../utils/tax-data";
 
 import ProvinceDropDown from "../province-dropdown/province-dropdown.component";
 
-import { Typography, FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Typography, InputAdornment, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 
 
 
 const InputForm = () => {
-    const { income, setIncome, results, setResults } = useContext(MyContext);
+    const { income, setIncome } = useContext(MyContext);
 
       
     const handleChange =  (prop) => (event) => {

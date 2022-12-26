@@ -1,6 +1,5 @@
 import './header.style.css';
 import { Typography } from "@mui/material";
-import { Fragment } from 'react';
 import { Box } from '@mui/system';
 
 const Header = () => {
