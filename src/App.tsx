@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+
+import Header from './components/header';
+import TaxResults from './components/tax-results';
+import UserInfoForm from './components/user-info-form';
+import { IncomeData } from './utils/types';
+
+const INITIAL_INCOME_DATA: IncomeData = {
+  provinceId: 'ON',
+  year: '2024',
+  employmentIncome: 0,
+  selfEmploymentIncome: 0,
+  otherIncome: 0,
+  rrspContribution: 0,
+  capitalGainsLosses: 0,
+  eligibleDividends: 0,
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [incomeData, setIncomeData] = useState<IncomeData>(INITIAL_INCOME_DATA);
+  console.log('incomeData', incomeData);
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Header />
+      <div className="flex w-full justify-center gap-4">
+        <UserInfoForm incomeData={incomeData} setIncomeData={setIncomeData} />
+        <TaxResults incomeData={incomeData} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
