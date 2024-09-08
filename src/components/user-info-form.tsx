@@ -7,18 +7,13 @@ import {
   SelectItem,
 } from '@nextui-org/react';
 
+import { useAppContext } from '../context/context-provider';
 import { PROVINCE_NAMES, TAX_YEARS } from '../utils/tax-data';
 import { IncomeData, ProvinceId } from '../utils/types';
 
-type UserInfoFormProps = {
-  incomeData: IncomeData;
-  setIncomeData: (data: IncomeData) => void;
-};
+const UserInfoForm: React.FC<UserInfoFormProps> = () => {
+  const { incomeData, setIncomeData } = useAppContext();
 
-const UserInfoForm: React.FC<UserInfoFormProps> = ({
-  incomeData,
-  setIncomeData,
-}) => {
   const handleInputChange =
     (key: keyof IncomeData) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setIncomeData({ ...incomeData, [key]: Number(e.target.value) });

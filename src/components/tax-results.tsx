@@ -1,14 +1,11 @@
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
+import { useAppContext } from '../context/context-provider';
 import { calculateTaxResults } from '../utils/calculate-tax';
-import { IncomeData } from '../utils/types';
 
-type TaxResultsProps = {
-  incomeData: IncomeData;
-};
-
-const TaxResults: React.FC<TaxResultsProps> = ({ incomeData }) => {
+const TaxResults: React.FC = () => {
+  const { incomeData } = useAppContext();
   const results = calculateTaxResults(incomeData);
 
   return (

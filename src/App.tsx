@@ -1,32 +1,22 @@
-import { useState } from 'react';
-
+import Background from './components/background';
 import Header from './components/header';
+import Navbar from './components/navbar';
 import TaxResults from './components/tax-results';
 import UserInfoForm from './components/user-info-form';
-import { IncomeData } from './utils/types';
-
-const INITIAL_INCOME_DATA: IncomeData = {
-  provinceId: 'ON',
-  year: '2024',
-  employmentIncome: 60000,
-  selfEmploymentIncome: 0,
-  otherIncome: 0,
-  rrspContribution: 0,
-  capitalGainsLosses: 0,
-  eligibleDividends: 0,
-};
+import { useAppContext } from './context/context-provider';
 
 function App() {
-  const [incomeData, setIncomeData] = useState<IncomeData>(INITIAL_INCOME_DATA);
-  console.log('incomeData', incomeData);
+  const { theme } = useAppContext();
   return (
-    <>
+    <div className={theme === 'dark' ? 'dark' : 'light'}>
+      <Background />
+      <Navbar />
       <Header />
       <div className="flex w-full justify-center gap-4">
-        <UserInfoForm incomeData={incomeData} setIncomeData={setIncomeData} />
-        <TaxResults incomeData={incomeData} />
+        <UserInfoForm />
+        <TaxResults />
       </div>
-    </>
+    </div>
   );
 }
 
