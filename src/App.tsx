@@ -8,7 +8,7 @@ import { IncomeData } from './utils/types';
 const INITIAL_INCOME_DATA: IncomeData = {
   provinceId: 'ON',
   year: '2024',
-  employmentIncome: 0,
+  employmentIncome: 60000,
   selfEmploymentIncome: 0,
   otherIncome: 0,
   rrspContribution: 0,

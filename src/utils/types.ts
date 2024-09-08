@@ -21,11 +21,28 @@ export type TaxBracket = {
 
 export type IncomeData = {
   provinceId: ProvinceId;
-  year: string;
+  year: TaxYear;
   employmentIncome: number;
   selfEmploymentIncome: number;
   otherIncome: number;
   rrspContribution: number;
   capitalGainsLosses: number;
   eligibleDividends: number;
+};
+
+export type TaxResults = {
+  totalIncome: number;
+  federalTax: number;
+  provincialTax: number;
+  cppEiPremiums: number;
+  totalTax: number;
+  afterTaxIncome: number;
+  averageTaxRate: number;
+  marginalTaxRate: number;
+  grossMonthlyIncome: number;
+  netMonthlyIncome: number;
+  grossBiweeklyIncome: number;
+  netBiweeklyIncome: number;
+  grossHourlyIncome: number;
+  netHourlyIncome: number;
 };

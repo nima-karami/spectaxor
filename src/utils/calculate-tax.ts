@@ -1,4 +1,16 @@
-const calculateResults = (incomeData: IncomeData) => {
+import {
+  CPP,
+  EI,
+  FEDERAL_BASIC_PERSONAL_AMOUNT,
+  FEDERAL_TAX_BRACKETS,
+  PROVINCIAL_BASIC_PERSONAL_AMOUNT,
+  PROVINCIAL_TAX_BRACKETS,
+} from './tax-data';
+import { IncomeData, TaxResults } from './types';
+
+export const calculateTaxResults: (incomeData: IncomeData) => TaxResults = (
+  incomeData
+) => {
   const {
     provinceId,
     year,
@@ -17,8 +29,11 @@ const calculateResults = (incomeData: IncomeData) => {
   let averageTaxRate = 0;
   let marginalTaxRate = 0;
   let afterTaxIncome = 0;
+  let grossMonthlyIncome = 0;
+  let grossBiweeklyIncome = 0;
+  let grossHourlyIncome = 0;
   let netMonthlyIncome = 0;
-  let netWeeklyIncome = 0;
+  let netBiweeklyIncome = 0;
   let netHourlyIncome = 0;
 
   const totalIncome =
@@ -35,63 +50,71 @@ const calculateResults = (incomeData: IncomeData) => {
     eligibleDividends * 0.38 -
     rrspContribution;
 
+  const federalBasicPersonalAmount = FEDERAL_BASIC_PERSONAL_AMOUNT[year];
+  const federalTaxBrackets = FEDERAL_TAX_BRACKETS[year];
+  const provincialBasicPersonalAmount =
+    PROVINCIAL_BASIC_PERSONAL_AMOUNT[year][provinceId];
+  const provincialTaxBrackets = PROVINCIAL_TAX_BRACKETS[year][provinceId];
+  const cpp = CPP[year];
+  const ei = EI[year];
+
   // Calculate federal tax
   const federalTaxCredit =
-    (federal_basic_personal_amount_2022 * federal_tax_brackets_2022[0][1]) /
-    100;
-  let unTaxedIncome = taxableIncome;
+    (federalBasicPersonalAmount * federalTaxBrackets[0].taxRate) / 100;
+  let untaxedIncome = taxableIncome;
 
   // Check if income is lower than the basic personal amount
-  if (unTaxedIncome < federal_basic_personal_amount_2022) {
-    unTaxedIncome = 0;
+  if (untaxedIncome < federalBasicPersonalAmount) {
+    untaxedIncome = 0;
   } else {
-    unTaxedIncome -= federalTaxCredit;
+    untaxedIncome -= federalTaxCredit;
   }
 
   let federalTaxBracketLow = 0;
   let federalTaxBracketHigh = 0;
   let federalTaxRate = 0;
 
-  for (let taxBracket of federal_tax_brackets_2022) {
+  for (const taxBracket of federalTaxBrackets) {
     if (federalTaxBracketLow < taxableIncome) {
-      [federalTaxBracketHigh, federalTaxRate] = taxBracket;
-      let taxedAmount = Math.min(
-        unTaxedIncome,
+      federalTaxBracketHigh = taxBracket.incomeThreshold;
+      federalTaxRate = taxBracket.taxRate;
+
+      const taxedAmount = Math.min(
+        untaxedIncome,
         federalTaxBracketHigh - federalTaxBracketLow
       );
       federalTax += Math.floor((taxedAmount * federalTaxRate) / 100);
-      unTaxedIncome -= taxedAmount;
+      untaxedIncome -= taxedAmount;
       federalTaxBracketLow = federalTaxBracketHigh;
     }
   }
 
   // Calculate provincial tax
-  let provincialTaxCredit =
-    (provincial_basic_personal_amount_2022[province] *
-      provincial_tax_brackets_2022[province][0][1]) /
-    100;
+  const provincialTaxCredit =
+    (provincialBasicPersonalAmount * provincialTaxBrackets[0].taxRate) / 100;
 
-  unTaxedIncome = taxableIncome;
+  untaxedIncome = taxableIncome;
   // Check if income is lower than the basic personal amount
-  if (unTaxedIncome < provincial_basic_personal_amount_2022[province]) {
-    unTaxedIncome = 0;
+  if (untaxedIncome < provincialBasicPersonalAmount) {
+    untaxedIncome = 0;
   } else {
-    unTaxedIncome -= provincialTaxCredit;
+    untaxedIncome -= provincialTaxCredit;
   }
 
   let provincialTaxBracketLow = 0;
   let provincialTaxBracketHigh = 0;
   let provincialTaxRate = 0;
 
-  for (let taxBracket of provincial_tax_brackets_2022[province]) {
+  for (const taxBracket of provincialTaxBrackets) {
     if (provincialTaxBracketLow < taxableIncome) {
-      [provincialTaxBracketHigh, provincialTaxRate] = taxBracket;
-      let taxedAmount = Math.min(
-        unTaxedIncome,
+      provincialTaxBracketHigh = taxBracket.incomeThreshold;
+      provincialTaxRate = taxBracket.taxRate;
+      const taxedAmount = Math.min(
+        untaxedIncome,
         provincialTaxBracketHigh - provincialTaxBracketLow
       );
       provincialTax += Math.floor((taxedAmount * provincialTaxRate) / 100);
-      unTaxedIncome -= taxedAmount;
+      untaxedIncome -= taxedAmount;
       provincialTaxBracketLow = provincialTaxBracketHigh;
     }
   }
@@ -99,26 +122,26 @@ const calculateResults = (incomeData: IncomeData) => {
   // Calculate CPP/EI
   let cppPremium = 0;
 
-  let TotalEmploymentIncome = employmentIncome + selfEmploymentIncome;
+  const TotalEmploymentIncome = employmentIncome + selfEmploymentIncome;
 
-  if (cpp_2022.basicExemptionAmount > TotalEmploymentIncome) {
+  if (cpp.basicExemptionAmount > TotalEmploymentIncome) {
     cppPremium = 0;
   } else {
-    let cppCredit = (cpp_2022.basicExemptionAmount * cpp_2022.rate) / 100;
-    let cppEmployed = Math.min(
-      (employmentIncome * cpp_2022.rate) / 100,
-      cpp_2022.maxContribution
+    const cppCredit = (cpp.basicExemptionAmount * cpp.rate) / 100;
+    const cppEmployed = Math.min(
+      (employmentIncome * cpp.rate) / 100,
+      cpp.maxContribution
     );
-    let cppSelfEmployed = Math.min(
-      (selfEmploymentIncome * cpp_2022.rate * 2) / 100,
-      cpp_2022.maxContribution * 2
+    const cppSelfEmployed = Math.min(
+      (selfEmploymentIncome * cpp.rate * 2) / 100,
+      cpp.maxContribution * 2
     );
     cppPremium = cppEmployed + cppSelfEmployed - cppCredit;
   }
 
-  let eiPremiums = Math.min(
-    (employmentIncome * ei_2022.rate) / 100,
-    ei_2022.maxContribution
+  const eiPremiums = Math.min(
+    (employmentIncome * ei.rate) / 100,
+    ei.maxContribution
   );
 
   cppEiPremiums = Math.ceil(cppPremium + eiPremiums);
@@ -127,14 +150,17 @@ const calculateResults = (incomeData: IncomeData) => {
   totalTax = federalTax + provincialTax + cppEiPremiums;
   afterTaxIncome = totalIncome - totalTax;
   netMonthlyIncome = Math.round(afterTaxIncome / 12);
-  netHourlyIncome = (netMonthlyIncome / 172).toFixed(2);
-  netWeeklyIncome = Math.round(netHourlyIncome * 40);
-  averageTaxRate = totalIncome
-    ? ((totalTax / totalIncome) * 100).toFixed(2)
-    : 0;
+  netHourlyIncome = netMonthlyIncome / 172;
+  netBiweeklyIncome = Math.round(netHourlyIncome * 40) * 2;
+  averageTaxRate = totalIncome ? (totalTax / totalIncome) * 100 : 0;
   marginalTaxRate = federalTaxRate + provincialTaxRate;
 
-  return {
+  // Calculate gross income
+  grossMonthlyIncome = totalIncome / 12;
+  grossBiweeklyIncome = (totalIncome / 52) * 2;
+  grossHourlyIncome = totalIncome / 52 / 40;
+
+  const results: TaxResults = {
     totalIncome: totalIncome,
     federalTax: federalTax,
     provincialTax: provincialTax,
@@ -144,7 +170,12 @@ const calculateResults = (incomeData: IncomeData) => {
     averageTaxRate: averageTaxRate,
     marginalTaxRate: marginalTaxRate,
     netMonthlyIncome: netMonthlyIncome,
-    netWeeklyIncome: netWeeklyIncome,
+    netBiweeklyIncome: netBiweeklyIncome,
     netHourlyIncome: netHourlyIncome,
+    grossMonthlyIncome: grossMonthlyIncome,
+    grossBiweeklyIncome: grossBiweeklyIncome,
+    grossHourlyIncome: grossHourlyIncome,
   };
+
+  return results;
 };

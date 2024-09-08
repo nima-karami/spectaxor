@@ -33,8 +33,8 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({
   };
 
   return (
-    <Card className="p-4 min-w-80">
-      <CardHeader className="font-bold justify-center">
+    <Card className="p-8 w-96">
+      <CardHeader className="font-bold justify-center mb-4">
         Your Information
       </CardHeader>
       <CardBody className="gap-4">
@@ -62,6 +62,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({
         </Select>
         <Input
           label="Employment Income"
+          value={incomeData.employmentIncome.toString()}
           onChange={handleInputChange('employmentIncome')}
           type="number"
           startContent={

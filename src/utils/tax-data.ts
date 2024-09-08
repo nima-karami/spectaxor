@@ -50,6 +50,7 @@ export const FEDERAL_TAX_BRACKETS: Record<TaxYear, TaxBracket[]> = {
   ],
 };
 
+// https://www.canada.ca/en/revenue-agency/services/tax/individuals/frequently-asked-questions-individuals/canadian-income-tax-rates-individuals-current-previous-years.html
 export const PROVINCIAL_TAX_BRACKETS: Record<
   TaxYear,
   Record<ProvinceId, TaxBracket[]>
@@ -409,123 +410,125 @@ export const PROVINCIAL_TAX_BRACKETS: Record<
   },
 };
 
-export const provincial_tax_brackets_2022 = {
-  Ontario: [
-    [46226, 5.05],
-    [92454, 9.15],
-    [150000, 11.16],
-    [220000, 12.16],
-    [+Infinity, 13.16],
-  ],
-  Quebec: [
-    [46295, 15],
-    [92580, 20],
-    [112655, 24],
-    [+Infinity, 25.75],
-  ],
-  'NewFoundland and Labrador': [
-    [39147, 8.7],
-    [78294, 14.5],
-    [139780, 15.8],
-    [195693, 17.8],
-    [250000, 19.8],
-    [500000, 20.8],
-    [1000000, 21.3],
-    [+Infinity, 21.8],
-  ],
-  'Prince Edward Island': [
-    [31984, 9.8],
-    [63969, 13.8],
-    [+Infinity, 16.7],
-  ],
-  'Nova Scotia': [
-    [29590, 8.79],
-    [59180, 14.95],
-    [93000, 16.67],
-    [150000, 17.5],
-    [+Infinity, 21],
-  ],
-  'New Brunswick': [
-    [44887, 9.4],
-    [89775, 14.82],
-    [145955, 16.52],
-    [166280, 17.84],
-    [+Infinity, 20.3],
-  ],
-  Saskatchewan: [
-    [46773, 10.5],
-    [133638, 12.5],
-    [+Infinity, 14.5],
-  ],
-  Manitoba: [
-    [34431, 10.8],
-    [74416, 12.75],
-    [+Infinity, 17.4],
-  ],
-  Alberta: [
-    [131220, 10],
-    [157464, 12],
-    [209952, 13],
-    [314928, 14],
-    [+Infinity, 15],
-  ],
-  'British Columbia': [
-    [43070, 5.06],
-    [86141, 7.7],
-    [98901, 10.5],
-    [120094, 12.29],
-    [162832, 14.7],
-    [227091, 16.8],
-    [+Infinity, 20.5],
-  ],
-  Yukon: [
-    [50197, 6.4],
-    [100392, 9],
-    [155625, 10.9],
-    [500000, 12.8],
-    [+Infinity, 15],
-  ],
-  'Northwest Territories': [
-    [45462, 5.9],
-    [90927, 8.6],
-    [147826, 12.2],
-    [+Infinity, 14.05],
-  ],
-  Nunavut: [
-    [47862, 4],
-    [95724, 7],
-    [155625, 9],
-    [+Infinity, 11.5],
-  ],
+// TODO: Update these values with the correct amounts
+export const FEDERAL_BASIC_PERSONAL_AMOUNT: Record<TaxYear, number> = {
+  '2021': 13229,
+  '2022': 14398,
+  '2023': 14779,
+  '2024': 15198,
 };
 
-export const federal_basic_personal_amount_2022 = 14398;
-
-export const provincial_basic_personal_amount_2022 = {
-  Ontario: 11141,
-  Quebec: 16143,
-  'NewFoundland and Labrador': 14398,
-  'Prince Edward Island': 11250,
-  'Nova Scotia': 11481,
-  'New Brunswick': 11720,
-  Saskatchewan: 16615,
-  Manitoba: 14398,
-  Alberta: 19369,
-  'British Columbia': 11984,
-  Yukon: 14398,
-  'Northwest Territories': 15609,
-  Nunavut: 16682,
+// TODO: Update these values with the correct amounts
+export const PROVINCIAL_BASIC_PERSONAL_AMOUNT: Record<
+  TaxYear,
+  Record<ProvinceId, number>
+> = {
+  '2021': {
+    AB: 19369,
+    BC: 10947,
+    MB: 10067,
+    NB: 10737,
+    NL: 10371,
+    NS: 12067,
+    NT: 15000,
+    NU: 15000,
+    ON: 10467,
+    PE: 10500,
+    QC: 15000,
+    SK: 16065,
+    YT: 15000,
+  },
+  '2022': {
+    AB: 19369,
+    BC: 11984,
+    MB: 14398,
+    NB: 11720,
+    NL: 14398,
+    NS: 11481,
+    NT: 15609,
+    NU: 16682,
+    ON: 11141,
+    PE: 11250,
+    QC: 16143,
+    SK: 16615,
+    YT: 14398,
+  },
+  '2023': {
+    AB: 19369,
+    BC: 11984,
+    MB: 14398,
+    NB: 11720,
+    NL: 14398,
+    NS: 11481,
+    NT: 15609,
+    NU: 16682,
+    ON: 11141,
+    PE: 11250,
+    QC: 16143,
+    SK: 16615,
+    YT: 14398,
+  },
+  '2024': {
+    AB: 19369,
+    BC: 11984,
+    MB: 14398,
+    NB: 11720,
+    NL: 14398,
+    NS: 11481,
+    NT: 15609,
+    NU: 16682,
+    ON: 11141,
+    PE: 11250,
+    QC: 16143,
+    SK: 16615,
+    YT: 14398,
+  },
 };
 
 // https://capricmw.ca/blog/federal-government-announces-new-cpp-and-ei-maximums#:~:text=The%20employee%20and%20employer%20contribution,11.4%20per%20cent%20in%202022.
 // cpp basic exemption amount and rate
-export const cpp_2022 = {
-  rate: 5.7,
-  basicExemptionAmount: 3500,
-  maxContribution: 3499.8,
+
+export const CPP: Record<
+  TaxYear,
+  { rate: number; basicExemptionAmount: number; maxContribution: number }
+> = {
+  '2021': {
+    rate: 5.45,
+    basicExemptionAmount: 3500,
+    maxContribution: 2898,
+  },
+  '2022': {
+    rate: 5.7,
+    basicExemptionAmount: 3500,
+    maxContribution: 3499.8,
+  },
+  '2023': {
+    rate: 5.7,
+    basicExemptionAmount: 3500,
+    maxContribution: 3499.8,
+  },
+  '2024': {
+    rate: 5.7,
+    basicExemptionAmount: 3500,
+    maxContribution: 3499.8,
+  },
 };
 
-export const ei_2022 = {
-  rate: 1.58,
-  maxContribution: 952.74,
+export const EI: Record<TaxYear, { rate: number; maxContribution: number }> = {
+  '2021': {
+    rate: 1.58,
+    maxContribution: 889.54,
+  },
+  '2022': {
+    rate: 1.58,
+    maxContribution: 952.74,
+  },
+  '2023': {
+    rate: 1.58,
+    maxContribution: 952.74,
+  },
+  '2024': {
+    rate: 1.58,
+    maxContribution: 952.74,
+  },
 };
