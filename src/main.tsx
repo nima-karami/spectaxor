@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 
 import { NextUIProvider } from '@nextui-org/react';
+import { Analytics } from '@vercel/analytics/react';
 import { createRoot } from 'react-dom/client';
 
 import App from './App.tsx';
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
     <AppContextProvider>
       <NextUIProvider>
         <App />
+        <Analytics />
       </NextUIProvider>
     </AppContextProvider>
   </StrictMode>
