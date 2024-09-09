@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { Switch } from '@nextui-org/react';
 
 import { useAppContext } from '../context/context-provider';
