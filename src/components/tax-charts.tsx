@@ -65,7 +65,6 @@ const calculateTotalTaxForAllProvincesAndSalaries = () => {
 
     results.push({ id: PROVINCE_NAMES[province], data });
   });
-  console.log('results', results);
   return results;
 };
 
@@ -126,6 +125,7 @@ const TaxCharts = () => {
                   label={point.serieId as string}
                   salary={point.data.x as number}
                   totalTax={point.data.y as number}
+                  color={point.serieColor as string}
                 />
               )
             )}
@@ -189,15 +189,22 @@ type ChartTooltipProps = {
   label: string;
   salary: number;
   totalTax: number;
+  color: string;
 };
 
 const ChartTooltip: React.FC<ChartTooltipProps> = ({
   label,
   salary,
   totalTax,
+  color,
 }) => {
   return (
-    <Card className="sm:p-4 bg-background p-2 text-sm sm:text-base">
+    <Card
+      className="sm:p-4 p-2 text-sm sm:text-base bg-background"
+      style={{
+        border: `2px solid ${color}`,
+      }}
+    >
       <p>{label}</p>
       <p>Salary: ${salary / 1000}k</p>
       <p>Total Tax: ${totalTax / 1000}k</p>

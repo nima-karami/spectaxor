@@ -280,12 +280,18 @@ const Result: React.FC<ResultProps> = ({ title, value, valueType }) => {
   );
 };
 
-const CustomTooltip: React.FC<{ value: number; label: string }> = ({
-  value,
-  label,
-}) => {
+const CustomTooltip: React.FC<{
+  value: number;
+  label: string;
+  color: string;
+}> = ({ value, label, color }) => {
   return (
-    <Card className="p-2 bg-background">
+    <Card
+      className="p-2 "
+      style={{
+        border: `2px solid ${color}`,
+      }}
+    >
       <h3>{label}</h3>
       <p>$ {value.toLocaleString()}</p>
     </Card>
@@ -315,7 +321,11 @@ const TaxPieChart: React.FC<TaxPieChartProps> = ({ data }) => {
       arcLabelsTextColor="lightGrey"
       activeOuterRadiusOffset={8}
       tooltip={({ datum }) => (
-        <CustomTooltip value={datum.value} label={datum.label as string} />
+        <CustomTooltip
+          value={datum.value}
+          label={datum.label as string}
+          color={datum.color as string}
+        />
       )}
       legends={[
         {
