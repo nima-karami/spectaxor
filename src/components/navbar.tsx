@@ -2,7 +2,7 @@ import ThemeSwitch from './theme-switch';
 
 const Navbar = () => {
   return (
-    <div className="fixed top-0 w-full flex justify-end p-8">
+    <div className="absolute top-0 w-full flex justify-end sm:p-8 p-4">
       <ThemeSwitch />
     </div>
   );

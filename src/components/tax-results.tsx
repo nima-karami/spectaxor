@@ -9,7 +9,7 @@ const TaxResults: React.FC = () => {
   const results = calculateTaxResults(incomeData);
 
   return (
-    <Card className="p-8 w-96">
+    <Card className="p-4 sm:p-8 w-full max-w-96 sm:w-96">
       <CardHeader className="font-bold justify-center mb-4">
         Estimated Results
       </CardHeader>
@@ -60,7 +60,7 @@ const TaxResults: React.FC = () => {
           valueType="currency"
         />
         <hr className="my-2" />
-        <div className="w-full min-h-96">
+        <div className="w-full h-96">
           <TaxPieChart
             data={[
               { name: 'Federal Tax', value: results.federalTax },
