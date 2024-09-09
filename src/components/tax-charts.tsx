@@ -1,6 +1,7 @@
 import { Card, CardBody, CardHeader, Tooltip } from '@nextui-org/react';
 import {
   CartesianGrid,
+  Label,
   Legend,
   Line,
   LineChart,
@@ -10,6 +11,7 @@ import {
 } from 'recharts';
 
 import { calculateTaxResults } from '../utils/calculate-tax';
+import { PROVINCE_NAMES } from '../utils/tax-data';
 import { ProvinceId } from '../utils/types';
 
 const allProvinces: ProvinceId[] = [
@@ -60,7 +62,7 @@ const calculateTotalTaxForAllProvincesAndSalaries = () => {
 
   for (const salary of salaryPoints) {
     const result: TaxChartData = {
-      salaryPoint: `$${salary.toLocaleString()}`,
+      salaryPoint: `$${(salary / 1000).toLocaleString()}k`,
       AB: 0,
       BC: 0,
       MB: 0,
@@ -77,7 +79,7 @@ const calculateTotalTaxForAllProvincesAndSalaries = () => {
     };
 
     for (const province of allProvinces) {
-      result[province] = calculateTotalTax(province, salary);
+      result[province] = calculateTotalTax(province, salary) / 1000;
     }
 
     results.push(result);
@@ -87,20 +89,21 @@ const calculateTotalTaxForAllProvincesAndSalaries = () => {
 
 const chartData = calculateTotalTaxForAllProvincesAndSalaries();
 
+// choose 13 distinct colors for each province
 const PROVINCE_COLORS: Record<ProvinceId, string> = {
   AB: '#8884d8',
   BC: '#82ca9d',
   MB: '#ffc658',
   NB: '#ff7300',
-  NL: '#d8b83f',
-  NS: '#ff85c0',
-  NT: '#a4de6c',
-  NU: '#82ca9d',
+  NL: '#0088FE',
+  NS: '#00C49F',
+  NT: '#FFBB28',
+  NU: '#FF8042',
   ON: '#8884d8',
-  PE: '#ffc658',
-  QC: '#ff7300',
-  SK: '#d8b83f',
-  YT: '#ff85c0',
+  PE: '#82ca9d',
+  QC: '#ffc658',
+  SK: '#ff7300',
+  YT: '#0088FE',
 };
 
 const TaxCharts = () => {
@@ -113,14 +116,39 @@ const TaxCharts = () => {
       <CardBody>
         <div className="w-full h-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <XAxis dataKey="salaryPoint" />
-              <YAxis />
+            <LineChart
+              data={chartData}
+              margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
+            >
+              <XAxis
+                dataKey="salaryPoint"
+                label={{
+                  value: 'Salary (in thousand dollars)',
+                  position: 'insideBottom',
+                  offset: -10,
+                }}
+              />
+              <YAxis unit="k">
+                <Label
+                  value="Total Tax (in thousand dollars)"
+                  angle={-90}
+                  offset={-10}
+                  position="insideLeft"
+                  style={{ textAnchor: 'middle' }}
+                />
+              </YAxis>
               <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
               <Tooltip />
-              <Legend />
+              <Legend
+                iconType="plainline"
+                values="Total Tax"
+                align="center"
+                verticalAlign="bottom"
+                wrapperStyle={{ bottom: 0 }}
+              />
               {allProvinces.map((province) => (
                 <Line
+                  name={PROVINCE_NAMES[province]}
                   key={province}
                   type="monotone"
                   dataKey={province}
