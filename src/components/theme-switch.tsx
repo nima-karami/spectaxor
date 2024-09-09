@@ -3,10 +3,10 @@ import { Switch } from '@nextui-org/react';
 import { useAppContext } from '../context/context-provider';
 
 const ThemeSwitch = () => {
-  const { setTheme } = useAppContext();
+  const { theme, setTheme } = useAppContext();
 
   const handleThemeChange = () => {
-    setTheme((theme) => (theme === 'light' ? 'dark' : 'light'));
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   return (

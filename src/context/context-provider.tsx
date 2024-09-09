@@ -16,8 +16,8 @@ const INITIAL_INCOME_DATA: IncomeData = {
 type AppContextType = {
   incomeData: IncomeData;
   setIncomeData: (incomeData: IncomeData) => void;
-  theme: string;
-  setTheme: (theme: string) => void;
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
 };
 
 const MyContext = createContext<AppContextType | undefined>(undefined);

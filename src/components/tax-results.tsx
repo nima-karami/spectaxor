@@ -158,7 +158,7 @@ const TaxPieChart: React.FC<TaxPieChartProps> = ({ data }) => {
           label={renderCustomizedLabel}
           legendType="circle"
         >
-          {data.map((entry, index) => (
+          {data.map((_, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>

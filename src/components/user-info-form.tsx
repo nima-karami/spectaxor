@@ -9,9 +9,9 @@ import {
 
 import { useAppContext } from '../context/context-provider';
 import { PROVINCE_NAMES, TAX_YEARS } from '../utils/tax-data';
-import { IncomeData, ProvinceId } from '../utils/types';
+import { IncomeData, ProvinceId, TaxYear } from '../utils/types';
 
-const UserInfoForm: React.FC<UserInfoFormProps> = () => {
+const UserInfoForm: React.FC = () => {
   const { incomeData, setIncomeData } = useAppContext();
 
   const handleInputChange =
@@ -24,7 +24,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = () => {
   };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setIncomeData({ ...incomeData, year: e.target.value });
+    setIncomeData({ ...incomeData, year: e.target.value as TaxYear });
   };
 
   return (
