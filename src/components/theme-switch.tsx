@@ -5,21 +5,11 @@ import { Switch } from '@nextui-org/react';
 import { useAppContext } from '../context/context-provider';
 
 const ThemeSwitch = () => {
-  const { theme, setTheme } = useAppContext();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const { theme, setTheme, isMobile } = useAppContext();
 
   const handleThemeChange = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [setIsMobile]);
 
   return (
     <Switch

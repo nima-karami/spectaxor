@@ -285,7 +285,7 @@ const CustomTooltip: React.FC<{ value: number; label: string }> = ({
   label,
 }) => {
   return (
-    <Card className="p-2 bg-background/70">
+    <Card className="p-2 bg-background">
       <h3>{label}</h3>
       <p>$ {value.toLocaleString()}</p>
     </Card>

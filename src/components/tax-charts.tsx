@@ -1,15 +1,7 @@
-import { Card, CardBody, CardHeader, Tooltip } from '@nextui-org/react';
-import {
-  CartesianGrid,
-  Label,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Card, CardBody, CardHeader } from '@nextui-org/react';
+import { ResponsiveLine } from '@nivo/line';
 
+import { useAppContext } from '../context/context-provider';
 import { calculateTaxResults } from '../utils/calculate-tax';
 import { PROVINCE_NAMES } from '../utils/tax-data';
 import { ProvinceId } from '../utils/types';
@@ -54,113 +46,161 @@ const calculateTotalTax = (province: ProvinceId, salary: number) => {
 // calculate the total tax for every province and salary point
 
 type TaxChartData = {
-  salaryPoint: string;
-} & { [key in ProvinceId]: number };
+  id: string;
+  data: { x: number; y: number }[];
+};
 
 const calculateTotalTaxForAllProvincesAndSalaries = () => {
   const results: TaxChartData[] = [];
 
-  for (const salary of salaryPoints) {
-    const result: TaxChartData = {
-      salaryPoint: `$${(salary / 1000).toLocaleString()}k`,
-      AB: 0,
-      BC: 0,
-      MB: 0,
-      NB: 0,
-      NL: 0,
-      NS: 0,
-      NT: 0,
-      NU: 0,
-      ON: 0,
-      PE: 0,
-      QC: 0,
-      SK: 0,
-      YT: 0,
-    };
+  allProvinces.forEach((province) => {
+    const data: { x: number; y: number }[] = [];
 
-    for (const province of allProvinces) {
-      result[province] = calculateTotalTax(province, salary) / 1000;
-    }
+    salaryPoints.forEach((salary) => {
+      data.push({
+        x: salary,
+        y: calculateTotalTax(province, salary),
+      });
+    });
 
-    results.push(result);
-  }
+    results.push({ id: PROVINCE_NAMES[province], data });
+  });
+  console.log('results', results);
   return results;
 };
 
 const chartData = calculateTotalTaxForAllProvincesAndSalaries();
 
-// choose 13 distinct colors for each province
-const PROVINCE_COLORS: Record<ProvinceId, string> = {
-  AB: '#8884d8',
-  BC: '#82ca9d',
-  MB: '#ffc658',
-  NB: '#ff7300',
-  NL: '#0088FE',
-  NS: '#00C49F',
-  NT: '#FFBB28',
-  NU: '#FF8042',
-  ON: '#8884d8',
-  PE: '#82ca9d',
-  QC: '#ffc658',
-  SK: '#ff7300',
-  YT: '#0088FE',
-};
-
 const TaxCharts = () => {
   console.log(chartData);
+  const { theme, isMobile } = useAppContext();
   return (
-    <Card className="lg:w-[800px] xl:w-[1000px] h-[600px] sm:p-8 p-4">
+    <Card className="lg:w-[800px] xl:w-[1000px] h-[750px] sm:h-[600px] p-4 sm:p-8 ">
       <CardHeader className="font-bold justify-center mb-4">
         Comparison of Total Tax by Province and Salary
       </CardHeader>
       <CardBody>
-        <div className="w-full h-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={chartData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
-            >
-              <XAxis
-                dataKey="salaryPoint"
-                label={{
-                  value: 'Salary (in thousand dollars)',
-                  position: 'insideBottom',
-                  offset: -10,
-                }}
-              />
-              <YAxis unit="k">
-                <Label
-                  value="Total Tax (in thousand dollars)"
-                  angle={-90}
-                  offset={-10}
-                  position="insideLeft"
-                  style={{ textAnchor: 'middle' }}
+        <div className="w-full h-full overflow-hidden">
+          <ResponsiveLine
+            data={chartData}
+            colors={{ scheme: 'paired' }}
+            margin={{
+              top: 50,
+              right: isMobile ? 0 : 150,
+              bottom: isMobile ? 320 : 50,
+              left: isMobile ? 90 : 100,
+            }}
+            xScale={{ type: 'point' }}
+            yScale={{
+              type: 'linear',
+              min: 'auto',
+              max: 'auto',
+            }}
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: 'Salary (in dollars)',
+              legendOffset: 36,
+              legendPosition: 'middle',
+              truncateTickAt: 0,
+              format: (value) => `$${value / 1000}k`,
+            }}
+            axisLeft={{
+              tickSize: 5,
+              tickPadding: 15,
+              tickRotation: 0,
+              legend: 'Total Tax (in dollars)',
+              legendOffset: -70,
+              legendPosition: 'middle',
+              format: (value) => `$${value / 1000}k`,
+            }}
+            enableTouchCrosshair={true}
+            useMesh={true}
+            tooltip={({ point }) => (
+              console.log(point),
+              (
+                <ChartTooltip
+                  label={point.serieId as string}
+                  salary={point.data.x as number}
+                  totalTax={point.data.y as number}
                 />
-              </YAxis>
-              <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-              <Tooltip />
-              <Legend
-                iconType="plainline"
-                values="Total Tax"
-                align="center"
-                verticalAlign="bottom"
-                wrapperStyle={{ bottom: 0 }}
-              />
-              {allProvinces.map((province) => (
-                <Line
-                  name={PROVINCE_NAMES[province]}
-                  key={province}
-                  type="monotone"
-                  dataKey={province}
-                  stroke={PROVINCE_COLORS[province]}
-                  activeDot={{ r: 18 }}
-                />
-              ))}
-            </LineChart>
-          </ResponsiveContainer>
+              )
+            )}
+            legends={[
+              {
+                itemTextColor: theme === 'dark' ? '#fff' : '#000',
+                anchor: isMobile ? 'bottom' : 'bottom-right',
+                direction: 'column',
+                justify: false,
+                translateX: isMobile ? -120 : 120,
+                translateY: isMobile ? 320 : 0,
+                itemsSpacing: 0,
+                itemDirection: 'left-to-right',
+                itemWidth: 80,
+                itemHeight: 20,
+                itemOpacity: 0.75,
+                symbolSize: 12,
+                symbolShape: 'circle',
+                symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                effects: [
+                  {
+                    on: 'hover',
+                    style: {
+                      itemBackground: 'rgba(0, 0, 0, .03)',
+                      itemOpacity: 1,
+                    },
+                  },
+                ],
+              },
+            ]}
+            theme={{
+              axis: {
+                ticks: {
+                  text: {
+                    fill: theme === 'dark' ? 'lightGrey' : 'grey',
+                  },
+                },
+                legend: {
+                  text: {
+                    fill: theme === 'dark' ? 'lightGrey' : 'grey',
+                  },
+                },
+              },
+              crosshair: {
+                line: {
+                  stroke: theme === 'dark' ? 'lightGrey' : 'grey',
+                  strokeWidth: 1,
+                  strokeDasharray: '6',
+                },
+              },
+            }}
+          />
         </div>
       </CardBody>
     </Card>
   );
 };
 export default TaxCharts;
+
+type ChartTooltipProps = {
+  label: string;
+  salary: number;
+  totalTax: number;
+};
+
+const ChartTooltip: React.FC<ChartTooltipProps> = ({
+  label,
+  salary,
+  totalTax,
+}) => {
+  return (
+    <Card className="sm:p-4 bg-background p-2 text-sm sm:text-base">
+      <p>{label}</p>
+      <p>Salary: ${salary / 1000}k</p>
+      <p>Total Tax: ${totalTax / 1000}k</p>
+    </Card>
+  );
+};

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { IncomeData, Theme } from '../utils/types';
 
@@ -18,6 +18,7 @@ type AppContextType = {
   setIncomeData: (incomeData: IncomeData) => void;
   theme: Theme;
   setTheme: (theme: Theme) => void;
+  isMobile: boolean;
 };
 
 const MyContext = createContext<AppContextType | undefined>(undefined);
@@ -31,8 +32,18 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({
 }) => {
   const [incomeData, setIncomeData] = useState<IncomeData>(INITIAL_INCOME_DATA);
   const [theme, setTheme] = useState<Theme>('dark');
+  const [isMobile, setIsMobile] = useState(false);
 
-  const value = { incomeData, setIncomeData, theme, setTheme };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setIsMobile]);
+
+  const value = { incomeData, setIncomeData, theme, setTheme, isMobile };
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;
 };
 
