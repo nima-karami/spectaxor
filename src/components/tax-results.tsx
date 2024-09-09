@@ -1,5 +1,5 @@
 import { Card, CardBody, CardHeader, Tab, Tabs } from '@nextui-org/react';
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
+import { ResponsivePie } from '@nivo/pie';
 
 import { useAppContext } from '../context/context-provider';
 import { calculateTaxResults } from '../utils/calculate-tax';
@@ -225,13 +225,29 @@ const TaxResults: React.FC = () => {
           </Tab>
         </Tabs>
 
-        <div className="w-full h-96">
+        <div className="w-full h-96 overflow-hidden">
           <TaxPieChart
             data={[
-              { name: 'Federal Tax', value: results.federalTax },
-              { name: 'Provincial Tax', value: results.provincialTax },
-              { name: 'CPP/EI Premiums', value: results.cppEiPremiums },
-              { name: 'After Tax Income', value: results.afterTaxIncome },
+              {
+                id: 'fed-tax',
+                label: 'Federal Tax',
+                value: results.federalTax,
+              },
+              {
+                id: 'prov-tax',
+                label: 'Provincial Tax',
+                value: results.provincialTax,
+              },
+              {
+                id: 'cpp-tax',
+                label: 'CPP/EI Premiums',
+                value: results.cppEiPremiums,
+              },
+              {
+                id: 'net-income',
+                label: 'After Tax Income',
+                value: results.afterTaxIncome,
+              },
             ]}
           />
         </div>
@@ -264,75 +280,68 @@ const Result: React.FC<ResultProps> = ({ title, value, valueType }) => {
   );
 };
 
-type TaxPieChartProps = {
-  data: { name: string; value: number }[];
-};
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-}: {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-  percent: number;
-  index: number;
-  payload: { name: string; value: number };
+const CustomTooltip: React.FC<{ value: number; label: string }> = ({
+  value,
+  label,
 }) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 1.8;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
   return (
-    <>
-      <text
-        x={x}
-        y={y}
-        fill={COLORS[index % COLORS.length]}
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    </>
+    <Card className="p-2 bg-background/70">
+      <h3>{label}</h3>
+      <p>$ {value.toLocaleString()}</p>
+    </Card>
   );
 };
 
+type TaxPieChartProps = {
+  data: { id: string; label: string; value: number }[];
+};
+
 const TaxPieChart: React.FC<TaxPieChartProps> = ({ data }) => {
+  const { theme } = useAppContext();
+  const totalValue = data.reduce((sum, item) => sum + item.value, 0);
+
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <PieChart width={400} height={100}>
-        <Pie
-          dataKey="value"
-          data={data}
-          fill="#8884d8"
-          cx="50%"
-          cy="50%"
-          outerRadius={80}
-          innerRadius={40}
-          labelLine={true}
-          label={renderCustomizedLabel}
-          legendType="circle"
-        >
-          {data.map((_, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Legend
-          layout="radial"
-          height={80}
-          margin={{ top: 0, left: 0, right: 0, bottom: 0 }}
-        />
-      </PieChart>
-    </ResponsiveContainer>
+    <ResponsivePie
+      data={data}
+      margin={{ top: 20, right: 50, bottom: 40, left: 50 }}
+      innerRadius={0.4}
+      padAngle={2}
+      cornerRadius={5}
+      colors={{ scheme: 'category10' }}
+      borderWidth={0}
+      enableArcLinkLabels={false}
+      arcLabelsSkipAngle={5}
+      arcLabel={(d) => `${((d.value / totalValue) * 100).toFixed(2)}%`}
+      arcLabelsTextColor="lightGrey"
+      activeOuterRadiusOffset={8}
+      tooltip={({ datum }) => (
+        <CustomTooltip value={datum.value} label={datum.label as string} />
+      )}
+      legends={[
+        {
+          anchor: 'bottom',
+          direction: 'column',
+          justify: false,
+          translateX: -90,
+          translateY: 30,
+          itemsSpacing: 5,
+          itemWidth: 100,
+          itemHeight: 18,
+          itemTextColor: '#999',
+          itemDirection: 'left-to-right',
+          itemOpacity: 1,
+          symbolSize: 18,
+          symbolShape: 'circle',
+          effects: [
+            {
+              on: 'hover',
+              style: {
+                itemTextColor: theme === 'dark' ? '#fff' : '#000',
+              },
+            },
+          ],
+        },
+      ]}
+    />
   );
 };
