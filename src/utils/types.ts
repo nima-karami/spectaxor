@@ -46,3 +46,5 @@ export type TaxResults = {
   grossHourlyIncome: number;
   netHourlyIncome: number;
 };
+
+export type Theme = 'light' | 'dark';

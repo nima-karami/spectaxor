@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 
-import { IncomeData } from '../utils/types';
+import { IncomeData, Theme } from '../utils/types';
 
 const INITIAL_INCOME_DATA: IncomeData = {
   provinceId: 'ON',
@@ -30,7 +30,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({
   children,
 }) => {
   const [incomeData, setIncomeData] = useState<IncomeData>(INITIAL_INCOME_DATA);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState<Theme>('dark');
 
   const value = { incomeData, setIncomeData, theme, setTheme };
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;

@@ -11,9 +11,8 @@ const ThemeSwitch = () => {
 
   return (
     <Switch
-      defaultSelected
       size="lg"
-      color="secondary"
+      color="primary"
       onChange={handleThemeChange}
       thumbIcon={({ isSelected }) => (isSelected ? <SunIcon /> : <MoonIcon />)}
     />
