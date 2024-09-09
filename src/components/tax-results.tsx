@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Tab, Tabs } from '@nextui-org/react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
 import { useAppContext } from '../context/context-provider';
@@ -14,52 +14,217 @@ const TaxResults: React.FC = () => {
         Estimated Results
       </CardHeader>
       <CardBody>
-        <Result
-          title="Total Income"
-          value={results.totalIncome}
-          valueType="currency"
-        />
+        <Tabs aria-label="Results" fullWidth variant="underlined">
+          <Tab
+            key="annual"
+            title="Annual"
+            className="w-full flex-grow flex flex-col justify-center items-center"
+          >
+            <Result
+              title="Total Income"
+              value={results.totalIncome}
+              valueType="currency"
+            />
 
-        <hr className="my-2" />
-        <Result
-          title="Federal Tax"
-          value={results.federalTax}
-          valueType="currency"
-        />
-        <Result
-          title="Provincial Tax"
-          value={results.provincialTax}
-          valueType="currency"
-        />
-        <Result
-          title="CPP/EI Premiums"
-          value={results.cppEiPremiums}
-          valueType="currency"
-        />
-        <Result
-          title="Total Tax"
-          value={results.totalTax}
-          valueType="currency"
-        />
-        <hr className="my-2" />
+            <hr className="my-2 w-full" />
+            <Result
+              title="Federal Tax"
+              value={results.federalTax}
+              valueType="currency"
+            />
+            <Result
+              title="Provincial Tax"
+              value={results.provincialTax}
+              valueType="currency"
+            />
+            <Result
+              title="CPP/EI Premiums"
+              value={results.cppEiPremiums}
+              valueType="currency"
+            />
+            <Result
+              title="Total Tax"
+              value={results.totalTax}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
 
-        <Result
-          title="Average Tax Rate"
-          value={results.averageTaxRate}
-          valueType="percentage"
-        />
-        <Result
-          title="Marginal Tax Rate"
-          value={results.marginalTaxRate}
-          valueType="percentage"
-        />
-        <hr className="my-2" />
-        <Result
-          title="After Tax Income"
-          value={results.afterTaxIncome}
-          valueType="currency"
-        />
-        <hr className="my-2" />
+            <Result
+              title="Average Tax Rate"
+              value={results.averageTaxRate}
+              valueType="percentage"
+            />
+            <Result
+              title="Marginal Tax Rate"
+              value={results.marginalTaxRate}
+              valueType="percentage"
+            />
+            <hr className="my-2 w-full" />
+            <Result
+              title="After Tax Income"
+              value={results.afterTaxIncome}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
+          </Tab>
+          <Tab
+            key="monthly"
+            title="Monthly"
+            className="w-full flex-grow flex flex-col justify-center items-center"
+          >
+            <Result
+              title="Total Income"
+              value={results.totalIncome / 12}
+              valueType="currency"
+            />
+
+            <hr className="my-2 w-full" />
+            <Result
+              title="Federal Tax"
+              value={results.federalTax / 12}
+              valueType="currency"
+            />
+            <Result
+              title="Provincial Tax"
+              value={results.provincialTax / 12}
+              valueType="currency"
+            />
+            <Result
+              title="CPP/EI Premiums"
+              value={results.cppEiPremiums / 12}
+              valueType="currency"
+            />
+            <Result
+              title="Total Tax"
+              value={results.totalTax / 12}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
+
+            <Result
+              title="Average Tax Rate"
+              value={results.averageTaxRate}
+              valueType="percentage"
+            />
+            <Result
+              title="Marginal Tax Rate"
+              value={results.marginalTaxRate}
+              valueType="percentage"
+            />
+            <hr className="my-2 w-full" />
+            <Result
+              title="After Tax Income"
+              value={results.afterTaxIncome / 12}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
+          </Tab>
+          <Tab
+            key="daily"
+            title="Daily"
+            className="w-full flex-grow flex flex-col justify-center items-center"
+          >
+            <Result
+              title="Total Income"
+              value={results.totalIncome / 260}
+              valueType="currency"
+            />
+
+            <hr className="my-2 w-full" />
+            <Result
+              title="Federal Tax"
+              value={results.federalTax / 260}
+              valueType="currency"
+            />
+            <Result
+              title="Provincial Tax"
+              value={results.provincialTax / 260}
+              valueType="currency"
+            />
+            <Result
+              title="CPP/EI Premiums"
+              value={results.cppEiPremiums / 260}
+              valueType="currency"
+            />
+            <Result
+              title="Total Tax"
+              value={results.totalTax / 260}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
+
+            <Result
+              title="Average Tax Rate"
+              value={results.averageTaxRate}
+              valueType="percentage"
+            />
+            <Result
+              title="Marginal Tax Rate"
+              value={results.marginalTaxRate}
+              valueType="percentage"
+            />
+            <hr className="my-2 w-full" />
+            <Result
+              title="After Tax Income"
+              value={results.afterTaxIncome / 260}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
+          </Tab>
+          <Tab
+            key="hourly"
+            title="Hourly"
+            className="w-full flex-grow flex flex-col justify-center items-center"
+          >
+            <Result
+              title="Total Income"
+              value={results.totalIncome / 2087}
+              valueType="currency"
+            />
+
+            <hr className="my-2 w-full" />
+            <Result
+              title="Federal Tax"
+              value={results.federalTax / 2087}
+              valueType="currency"
+            />
+            <Result
+              title="Provincial Tax"
+              value={results.provincialTax / 2087}
+              valueType="currency"
+            />
+            <Result
+              title="CPP/EI Premiums"
+              value={results.cppEiPremiums / 2087}
+              valueType="currency"
+            />
+            <Result
+              title="Total Tax"
+              value={results.totalTax / 2087}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
+
+            <Result
+              title="Average Tax Rate"
+              value={results.averageTaxRate}
+              valueType="percentage"
+            />
+            <Result
+              title="Marginal Tax Rate"
+              value={results.marginalTaxRate}
+              valueType="percentage"
+            />
+            <hr className="my-2 w-full" />
+            <Result
+              title="After Tax Income"
+              value={results.afterTaxIncome / 2087}
+              valueType="currency"
+            />
+            <hr className="my-2 w-full" />
+          </Tab>
+        </Tabs>
+
         <div className="w-full h-96">
           <TaxPieChart
             data={[
@@ -92,7 +257,7 @@ const Result: React.FC<ResultProps> = ({ title, value, valueType }) => {
     formattedValue = `${truncatedValue}%`;
   }
   return (
-    <div className="flex justify-between">
+    <div className="w-full flex justify-between">
       <p>{title}</p>
       <p>{formattedValue}</p>
     </div>
