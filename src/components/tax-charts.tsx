@@ -147,7 +147,7 @@ const TaxCharts = () => {
 
   return (
     <Card className="lg:w-[800px] xl:w-[1000px] h-[750px] sm:h-[600px] p-4 sm:p-8 ">
-      <CardHeader className="font-bold justify-center mb-4">
+      <CardHeader className="font-bold justify-center ">
         Comparison of Total Tax by Province and Salary
       </CardHeader>
       <CardBody>
