@@ -1,5 +1,7 @@
+import { useMemo, useState } from 'react';
+
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
-import { ResponsiveLine } from '@nivo/line';
+import { Layer, ResponsiveLine } from '@nivo/line';
 
 import { useAppContext } from '../context/context-provider';
 import { calculateTaxResults } from '../utils/calculate-tax';
@@ -73,6 +75,86 @@ const chartData = calculateTotalTaxForAllProvincesAndSalaries();
 const TaxCharts = () => {
   console.log(chartData);
   const { theme, isMobile } = useAppContext();
+  const [selectedProvince, setSelectedProvince] = useState<ProvinceId | null>(
+    null
+  );
+
+  const legendsItemTextColors = {
+    selected: theme === 'dark' ? '#fff' : '#000',
+    unselected: theme === 'dark' ? 'lightGrey' : 'grey',
+  };
+
+  const lineOpacity = {
+    selected: 1,
+    unselected: 0.3,
+  };
+
+  // Define the CustomLayerProps type
+  type CustomLayerProps = {
+    series: {
+      id: string;
+      data: { data: { x: number; y: number } }[];
+      color: string;
+    }[];
+    lineGenerator: (data: { x: number; y: number }[]) => string;
+    xScale: (value: number) => number;
+    yScale: (value: number) => number;
+  };
+
+  // Create a custom line layer to adjust line opacity
+  const CustomLineLayer: React.FC<CustomLayerProps> = ({
+    series,
+    lineGenerator,
+    xScale,
+    yScale,
+  }) => (
+    <g>
+      {series.map(({ id, data, color }) => (
+        <path
+          key={id}
+          d={lineGenerator(
+            data.map((d) => ({
+              x: xScale(d.data.x),
+              y: yScale(d.data.y),
+            }))
+          )}
+          fill="none"
+          stroke={color}
+          strokeWidth={2}
+          opacity={
+            selectedProvince === null || selectedProvince === id ? 1 : 0.1
+          }
+        />
+      ))}
+    </g>
+  );
+
+  // Create custom points layer to adjust point opacity
+  const CustomPointsLayer: React.FC<CustomLayerProps> = ({
+    series,
+    xScale,
+    yScale,
+  }) => (
+    <g>
+      {series.map(({ id, data, color }) => (
+        <g key={id}>
+          {data.map((d) => (
+            <circle
+              key={`${id}-${d.data.x}`}
+              cx={xScale(d.data.x)}
+              cy={yScale(d.data.y)}
+              r={4}
+              fill={color}
+              opacity={
+                selectedProvince === null || selectedProvince === id ? 1 : 0.1
+              }
+            />
+          ))}
+        </g>
+      ))}
+    </g>
+  );
+
   return (
     <Card className="lg:w-[800px] xl:w-[1000px] h-[750px] sm:h-[600px] p-4 sm:p-8 ">
       <CardHeader className="font-bold justify-center mb-4">
@@ -84,8 +166,8 @@ const TaxCharts = () => {
             data={chartData}
             colors={{ scheme: 'paired' }}
             margin={{
-              top: 50,
-              right: isMobile ? 0 : 150,
+              top: 100,
+              right: isMobile ? 0 : 200,
               bottom: isMobile ? 320 : 50,
               left: isMobile ? 90 : 100,
             }}
@@ -129,6 +211,16 @@ const TaxCharts = () => {
                 />
               )
             )}
+            layers={[
+              'grid',
+              'markers',
+              'axes',
+              CustomLineLayer as unknown as Layer,
+              CustomPointsLayer as unknown as Layer,
+              'slices',
+              'mesh',
+              'legends',
+            ]}
             legends={[
               {
                 itemTextColor: theme === 'dark' ? '#fff' : '#000',
@@ -145,6 +237,11 @@ const TaxCharts = () => {
                 symbolSize: 12,
                 symbolShape: 'circle',
                 symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                onClick: (data) => {
+                  setSelectedProvince((prev) =>
+                    prev === data.id ? null : (data.id as ProvinceId)
+                  );
+                },
                 effects: [
                   {
                     on: 'hover',
