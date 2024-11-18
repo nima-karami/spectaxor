@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import { Layer, ResponsiveLine } from '@nivo/line';
@@ -78,16 +78,6 @@ const TaxCharts = () => {
   const [selectedProvince, setSelectedProvince] = useState<ProvinceId | null>(
     null
   );
-
-  const legendsItemTextColors = {
-    selected: theme === 'dark' ? '#fff' : '#000',
-    unselected: theme === 'dark' ? 'lightGrey' : 'grey',
-  };
-
-  const lineOpacity = {
-    selected: 1,
-    unselected: 0.3,
-  };
 
   // Define the CustomLayerProps type
   type CustomLayerProps = {
